@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding ="UTF-8"?>
+<Tree>
+    <RootNode>
+	<key>1</key>
+	<data>Max</data>
+	<childID>0</childID>
+	<children>
+	    <Node>
+		<childID>1</childID>
+	    </Node>
+	</children>
+    </RootNode>
+</Tree>
