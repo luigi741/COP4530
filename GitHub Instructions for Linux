@@ -14,7 +14,10 @@ GitHub Instructions for Linux
 4. Clone GitHub repository to your computer
 	$ git clone https://github.com/luigi741/COP4530.git
 
-5. Pushing to the GitHub repository
+5. Pulling from the GitHub repository
+	$ git pull origin master
+
+6. Pushing to the GitHub repository
 	// This following command stages all files to be committed/pushed to the repository
 	$ git add .
 		// To unstage use $ git reset HEAD FILENAME
