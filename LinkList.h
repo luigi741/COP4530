@@ -6,14 +6,11 @@
 
 using namespace std;
 
-template<class K>
-class TreeNode;
+template<class K> class TreeNode;
 
-template<class T>
-class LinkList
+template<class T> class LinkList
 {
 	private:
-
 		int sz; //number of entries in linked list.
 		int childID = 1;
 		T *head;

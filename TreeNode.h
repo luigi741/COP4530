@@ -3,37 +3,36 @@
 
 #include <iostream>
 #include <cassert>
+#include <stdlib.h>
+#include <cstdlib>
 #include "tinyxml.h"
 #include "LinkList.h"
 
-
-/*
-*/
 using namespace std;
+template<class T> class LinkList;
 
 template<class Type> class TreeNode
 {
 private:
-
     int key;
     Type data;
 
     TreeNode<Type> *parentNode; //points to parent node
     TreeNode<Type> *next; //Points to the next sibling in the LinkList of its parent.
-    LinkList<TreeNode*> *children; //LinkList holds list of children
+    LinkList<TreeNode<Type> > *children; //LinkList holds list of children
 
     int siblings;
     int Size = 0; //Number of elements in the tree
     int Height;
     TreeNode<Type> *root;
 
-    template <class T> friend class LinkedList;
+    template <class T> friend class LinkList;
 public:
-    TreeNode():key(0), parentNode(NULL), next(NULL), children(NULL)
+    TreeNode() : key(0), parentNode(NULL), next(NULL), children(NULL)
     {
         //
     }
-    TreeNode(const int &key, const Type &data):parentNode(NULL), next(NULL), children(NULL)
+    TreeNode(const int &key, const Type &data) : parentNode(NULL), next(NULL), children(NULL)
     {
         this->data = data;
         this->key = key;
@@ -42,7 +41,7 @@ public:
     ~TreeNode()
     {}
 
-//Mutators
+    //Mutators
     void buildTree(const string &Tree_xml)
     {
         //Reads text file and builds tree from xml file
@@ -64,7 +63,7 @@ public:
         //set the key variable
         TiXmlNode* member_node = root_node->FirstChild(); //points to childID Node
         assert(member_node != 0);
-        this->key = (int)member_node->Value();
+        this->key = atoi(member_node->Value());
 
         //set the data variable
         member_node = member_node->NextSibling();
@@ -74,10 +73,10 @@ public:
         //set children integer.
         member_node = member_node->NextSibling();
         assert(member_node != 0);
-        this->childID = (int)member_node->Value();
+        this->childID = atoi(member_node->Value());
 
+        // Set the root node - venue_file_node->FirstChild() == "<RootNode>"       
 
-        //Set the root node---> venue_file_node->FirstChild() == "<RootNode>"
         cout << *root_node;
 
     }
@@ -105,8 +104,10 @@ public:
         }
     }
 
-    //*******************************************************
+    //===========================================================================
     //Accessors
+    //===========================================================================
+    
     TreeNode<Type>* getRoot()
     {
         return root;
@@ -154,6 +155,7 @@ public:
     int getDepth(TreeNode<Type> *_ptr)
     {
         //Return depth of _ptr.
+        return 0;
     }
 
     bool isEmpty() const
@@ -166,13 +168,20 @@ public:
         //Returns the number of leaves.
         int numLeaves = 0;
 
+        if (root == NULL) {
+            return numLeaves = 0;
+        }
+        else if (children == NULL) {
+            return numLeaves = 1;
+        }
+
         return numLeaves;
     }
     //NOT DONE
-    int siblings(TreeNode<Type> *_ptr)
+    int returnSiblings(TreeNode<Type> *_ptr)
     {
         //Return the number of siblings that the _ptr has.
-
+        return 0;
     }
 
     //NOT DONE

@@ -50,21 +50,18 @@ int main()
     TreeNode<string>* Tree = new TreeNode<string>;
 
     int opCode;
-    cout << "GeneralTree Functions: " << endl;
+    cout << "GenTree Functions: " << endl;
     cout << "1. BuildTree()" << endl;
     cout << "2. AddNode()" << endl;
     cout << "3. del()" << endl;
+    cout << "Enter function to test: ";
     cin >> opCode;
 
-    switch(opCode)
-    {
-    case 1:
-
-        Tree->buildTree("Tree.xml");
+    switch (opCode) {
+    case 1: 
+            //Tree->buildTree("Tree.xml");
+            break;
     }
 
-
-    cout << "LUIS SUCKS" << endl;
-	cout << "Test at 8:10P" << endl;
 	return 0;
 }

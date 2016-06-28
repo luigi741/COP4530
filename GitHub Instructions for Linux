@@ -1,0 +1,22 @@
+GitHub Instructions for Linux
+
+1. Install GitHub through the command line
+	$ sudo apt-get install git
+
+2. Configure your username and e-mail
+	$ git config --global user.name "Enter username WITH the quotations"
+	$ git config --global user.email "Enter email WITH the quotations"
+
+3. Make a new directory called DataStructures in your documents
+	$ git init DataStructures
+	$ cd DataStructues
+
+4. Clone GitHub repository to your computer
+	$ git clone https://github.com/luigi741/COP4530.git
+
+5. Pushing to the GitHub repository
+	// This following command stages all files to be committed/pushed to the repository
+	$ git add .
+		// To unstage use $ git reset HEAD FILENAME
+	$ git commit -d "Description of this push/commit"
+	$ git push origin master
