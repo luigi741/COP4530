@@ -64,7 +64,7 @@ int main()
     }
 
 
-    cout << "This is a test from Luis's Tower at 8:00P" << endl;
+    cout << "LUIS SUCKS" << endl;
 	cout << "Test at 8:10P" << endl;
 	return 0;
 }
