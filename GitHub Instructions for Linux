@@ -18,5 +18,5 @@ GitHub Instructions for Linux
 	// This following command stages all files to be committed/pushed to the repository
 	$ git add .
 		// To unstage use $ git reset HEAD FILENAME
-	$ git commit -d "Description of this push/commit"
+	$ git commit -m "Description of this push/commit"
 	$ git push origin master
