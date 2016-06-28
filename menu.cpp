@@ -63,5 +63,8 @@ int main()
         Tree->buildTree("Tree.xml");
     }
 
+
+    cout << "This is a test from Luis's Tower at 8:00P" << endl;
+
 	return 0;
 }
