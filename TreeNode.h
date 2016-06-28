@@ -2,13 +2,15 @@
 #define TREENODE_H_INCLUDED
 
 #include <iostream>
+#include <fstream>
 #include <cassert>
 #include <stdlib.h>
 #include <cstdlib>
-#include "tinyxml.h"
+#include <string>
 #include "LinkList.h"
 
 using namespace std;
+
 template<class T> class LinkList;
 
 template<class Type> class TreeNode
@@ -19,7 +21,7 @@ private:
 
     TreeNode<Type> *parentNode; //points to parent node
     TreeNode<Type> *next; //Points to the next sibling in the LinkList of its parent.
-    LinkList<TreeNode<Type> > *children; //LinkList holds list of children
+    LinkList<TreeNode*> *children; //LinkList holds list of children
 
     int siblings;
     int Size = 0; //Number of elements in the tree
@@ -27,6 +29,7 @@ private:
     TreeNode<Type> *root;
 
     template <class T> friend class LinkList;
+
 public:
     TreeNode() : key(0), parentNode(NULL), next(NULL), children(NULL)
     {
@@ -41,43 +44,96 @@ public:
     ~TreeNode()
     {}
 
-    //Mutators
-    void buildTree(const string &Tree_xml)
+    void insert(const Type & data, const int &key, TreeNode<Type> *parent,int node_pos)
     {
-        //Reads text file and builds tree from xml file
-        TiXmlDocument doc(Tree_xml);
-
-        if (!doc.LoadFile())
+        cout << "Inserting " << data <<" in position "<<node_pos<<  ", parent is " << (parent==NULL ? "NULL, this is the root.":parent->data) << endl;
+        TreeNode<Type> *n = new TreeNode<Type>(key, data);
+        if (parent==NULL)
         {
-            cout << "Could not load file " << Tree_xml << endl;
-            cout << "Error= " << doc.ErrorDesc() << endl;
+            root = n;
+            Size++;
         }
+        else
+        {
+            if (parent->children->getHead() == NULL)
+            {
+                n->parentNode = parent;
+                parent->children->head = n;
+                Size++;
+            }
+            else
+            {
+                TreeNode<Type> *ptr = parent->children->getHead();
+                while(ptr->getNext() != NULL) 
+                {
+                    ptr = ptr->getNext();
+                }
+                    
+                n->parentNode = parent;
+                ptr->next = n;
+                Size++;
+            }
+        }
+    }
 
-        TiXmlNode* tree_file_node = doc.FirstChild("Tree");
-        assert(tree_file_node != 0);
+    TreeNode<Type> * findParent(string str)
+    {
+        int level = 0;
+        for (int i=str.size()-1;i>=0;i--)
+        {
+            if (str[i]=='.') level++;
+        }
+        if (level < 1) return root;
+        else
+        {
+            int last_dot = str.find_last_of('.');
+            int cur_level = 0;
+            str = str.substr(last_dot+1); // 0.#.#.par_pos
+            string::size_type sz;
+            int par_pos = atoi(str.c_str());
+            TreeNode<Type> * ptr = root;
+            while (ptr !=nullptr && cur_level!=level)
+            {
+                ptr= ptr->children->getHead();
+                cur_level++;
+            }
+            for(int i=0;i<par_pos;i++)
+            {
+                ptr = ptr->getNext();
+            }
+            return ptr;
+        }
+    }
 
-        //Set the root node---> venue_file_node->FirstChild() == "<RootNode>"
-        TiXmlNode* root_node = tree_file_node->FirstChild();
-        assert(root_node != 0);
+    void buildTree(const string path)
+    {
+        string line;
+        ifstream myfile (path);
+        if (myfile.is_open())
+        {
+            while ( getline (myfile,line) )
+            {
+                int pos = line.find('.');
+                string data = line.substr(0,pos);
 
-        //set the key variable
-        TiXmlNode* member_node = root_node->FirstChild(); //points to childID Node
-        assert(member_node != 0);
-        this->key = atoi(member_node->Value());
+                int pos2 = line.find(' ');
+                string key0 = line.substr(pos2, pos);
+                int key1 = atoi(key0.c_str()); 
 
-        //set the data variable
-        member_node = member_node->NextSibling();
-        assert(member_node != 0);
-        this->data = member_node->Value();
+                string str = line.substr(pos2+1);
+                pos = str.find_last_of('.');
+                string str2 = str.substr(pos+1);
+                string::size_type sz;
 
-        //set children integer.
-        member_node = member_node->NextSibling();
-        assert(member_node != 0);
-        this->childID = atoi(member_node->Value());
-
-        // Set the root node - venue_file_node->FirstChild() == "<RootNode>"       
-
-        cout << *root_node;
+                int node_pos = atoi(str2.c_str());
+                str = str.substr(0,pos);
+                TreeNode<Type> *ptr = findParent(str);
+                // cout << "parent for " << data << " is "<< (ptr==nullptr?"nullptr":ptr->data)<<endl;
+                insert(data, key1, ptr, node_pos);
+            }
+            myfile.close();
+        }
+        else cout << "Unable to open file";
 
     }
 
@@ -92,16 +148,6 @@ public:
     void del(Type &data)
     {
         //deletes "data" from tree.
-    }
-
-    void insertNode(int &_key, Type &_data)
-    {
-        TreeNode<Type> *newNode = new TreeNode<Type>(_key, _data);
-        Size++;
-        if(Size == 1)
-        {
-            root = newNode;
-        }
     }
 
     //===========================================================================
@@ -239,21 +285,10 @@ public:
         return key;
     }
 
-    TreeNode<Type> *showParent() const
-    {
-        if(this->parentNode==NULL)
-        {
-            return NULL;
-        }
-        else
-        {
-            return this->parentNode;
-        }
-    }
-
     void disTree() const
     {
         TreeNode<Type> *ptr = root;
+
 
         while(ptr != NULL)
         {

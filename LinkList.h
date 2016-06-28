@@ -13,10 +13,12 @@ template<class T> class LinkList
 	private:
 		int sz; //number of entries in linked list.
 		int childID = 1;
-		T *head;
-		T *tail;
-		T *childArray; //An pointer to Node pointers that
+		T head;
+		T tail;
+		T childArray; //An pointer to Node pointers that
 							//point to the children of a node.
+
+		template<class Type> friend class TreeNode;
 	public:
 		LinkList():head(NULL), tail(NULL)
 		{

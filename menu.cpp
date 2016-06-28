@@ -59,7 +59,7 @@ int main()
 
     switch (opCode) {
     case 1: 
-            //Tree->buildTree("Tree.xml");
+            Tree->buildTree("tree.txt");
             break;
     }
 
