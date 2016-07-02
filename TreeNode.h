@@ -101,12 +101,10 @@ public:
             //cout << "return NULL" << endl;
             return NULL;
         }  
-        else if(level == 1)
-        {
-            return root;
-        } 
+
         else
         { 
+
             cout << "else" << endl;
             int cur_level = 0;       
             int last_dot = str.find_last_of('.');
@@ -117,17 +115,26 @@ public:
 
             cout << "childpos" << child_pos << endl;
 
+
+            if(level == 1)
+            {
+                return root;
+            } 
+
+
             TreeNode<Type> *ptr = root;
             //ptr->children = new LinkList<TreeNode*>;
 
-            while (ptr->children != NULL && cur_level!=level)
+            while (ptr->children != NULL && cur_level != level)
             {
-                cout << "ptr->children->getHead() = " << ptr->children->getHead()->key << endl;
+                cout << "ptr->children->getHead()->data = " << ptr->children->getHead()->data << endl;
                 ptr = ptr->children->getHead();
                 cur_level++;
             }
-            for(int i=child_pos;i>=0;i--)
+
+            for(int i = child_pos; i >= 0; i--)
             {
+                cout << "ptr->getNext()->data :" << ptr->getNext()->data << endl;
                 ptr = ptr->getNext();
             }
             return ptr;
@@ -145,6 +152,7 @@ public:
             {
                 int pos = line.find('.');
                 string data = line.substr(0,pos);
+                cout << "**********************" << endl;
                 cout << "**Data = " << data << endl;
 
 
@@ -152,16 +160,17 @@ public:
                 int pos2 = str.find('.');
                 string key0 = line.substr(pos+1, pos2);
                 int key1 = atoi(key0.c_str());
-                cout <<"**Key0 = " << key0 << endl;
+                cout <<"**Key1 = " << key1 << endl;
                 
 
                 pos = str.find_last_of('.');
                 string str2 = str.substr(pos+1);
-                string::size_type sz;
+                //DELETE::string::size_type sz;
                 int node_pos = atoi(str2.c_str());
+                cout << "**pos : " << node_pos << endl;
                 
                 str = str.substr(pos2+1);
-                cout << "str: " << str << endl;
+                cout << "**str: " << str << endl;
 
                 //Find the parentNode to the TreeNode.
                 TreeNode<Type> *pPtr = findParent(str);
