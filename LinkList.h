@@ -68,12 +68,18 @@ template<class T> class LinkList
 //Accessors
         bool isEmpty()
         {
+        	if(head==0) cout << "Empty" << endl;
             return head==0;
         }
 
 		T getHead()
 		{
 			return head;
+		}
+
+		void setHead(T TreeNode)
+		{
+			this->head = TreeNode;
 		}
 
 		T getTail()

@@ -1,13 +1,13 @@
-data_structures.1 0
-hws.2 0.0
-projects.3 0.1
-quizzes.4 0.2
-exams.5 0.3
-hw1.6 0.0.0
-p1.7 0.1.0
-p2.8 0.1.1
-q1.9 0.2.0
-q2.10 0.2.1
-q3.11 0.2.2
-q4.12 0.2.3
-final_exam.13 0.3.0
+data_structures.1.0
+hws.2.0.0
+projects.3.0.1
+quizzes.4.0.2
+exams.5.0.3
+hw1.6.0.0.0
+p1.7.0.1.0
+p2.8.0.1.1
+q1.9.0.2.0
+q2.10.0.2.1
+q3.11.0.2.2
+q4.12.0.2.3
+final_exam.13.0.3.0

@@ -18,7 +18,8 @@ template<class Type> class TreeNode
 private:
     int key;
     Type data;
-
+    
+    TreeNode<Type> *root;
     TreeNode<Type> *parentNode; //points to parent node
     TreeNode<Type> *next; //Points to the next sibling in the LinkList of its parent.
     LinkList<TreeNode*> *children; //LinkList holds list of children
@@ -26,16 +27,15 @@ private:
     int siblings;
     int Size = 0; //Number of elements in the tree
     int Height;
-    TreeNode<Type> *root;
 
     template <class T> friend class LinkList;
 
 public:
-    TreeNode() : key(0), parentNode(NULL), next(NULL), children(NULL)
+    TreeNode() : key(0), parentNode(NULL), root(NULL), next(NULL), children(NULL)
     {
         //
     }
-    TreeNode(const int &key, const Type &data) : parentNode(NULL), next(NULL), children(NULL)
+    TreeNode(const int &key, const Type &data) : parentNode(NULL), root(NULL), next(NULL), children(NULL)
     {
         this->data = data;
         this->key = key;
@@ -47,18 +47,24 @@ public:
     void insert(const Type & data, const int &key, TreeNode<Type> *parent,int node_pos)
     {
         cout << "Inserting " << data <<" in position "<<node_pos<<  ", parent is " << (parent==NULL ? "NULL, this is the root.":parent->data) << endl;
+        
         TreeNode<Type> *n = new TreeNode<Type>(key, data);
+
         if (parent==NULL)
         {
+            //cout << "parent == NULL;" << endl;
             root = n;
+            //cout << "root->data" << root->data << endl;
             Size++;
         }
         else
         {
-            if (parent->children->getHead() == NULL)
+            //cout << "DEBUG: " << endl;
+            if(parent->children == NULL)
             {
+                parent->children = new LinkList<TreeNode*>;
+                parent->children->setHead(n);
                 n->parentNode = parent;
-                parent->children->head = n;
                 Size++;
             }
             else
@@ -79,25 +85,48 @@ public:
     TreeNode<Type> * findParent(string str)
     {
         int level = 0;
-        for (int i=str.size()-1;i>=0;i--)
+        //Counts the number of periods (represent levels in tree)
+        //cout << "debug:strsize " << str.size() << endl;
+        for (int i=str.size()-1; i >=0 ; i--)
         {
+
             if (str[i]=='.') level++;
+            //cout << "HERE" << endl;
         }
-        if (level < 1) return root;
-        else
+
+        cout << "level: " << level << endl;
+        if (level == 0)
         {
+            //If there were no periods it was the root node, NULL parent.
+            //cout << "return NULL" << endl;
+            return NULL;
+        }  
+        else if(level == 1)
+        {
+            return root;
+        } 
+        else
+        { 
+            cout << "else" << endl;
+            int cur_level = 0;       
             int last_dot = str.find_last_of('.');
-            int cur_level = 0;
-            str = str.substr(last_dot+1); // 0.#.#.par_pos
-            string::size_type sz;
-            int par_pos = atoi(str.c_str());
-            TreeNode<Type> * ptr = root;
-            while (ptr !=nullptr && cur_level!=level)
+            //cout << "lastdot" << last_dot << endl;
+            str = str.substr(last_dot+1); // 0.#.#.child_pos
+
+            int child_pos = atoi(str.c_str());
+
+            cout << "childpos" << child_pos << endl;
+
+            TreeNode<Type> *ptr = root;
+            //ptr->children = new LinkList<TreeNode*>;
+
+            while (ptr->children != NULL && cur_level!=level)
             {
-                ptr= ptr->children->getHead();
+                cout << "ptr->children->getHead() = " << ptr->children->getHead()->key << endl;
+                ptr = ptr->children->getHead();
                 cur_level++;
             }
-            for(int i=0;i<par_pos;i++)
+            for(int i=child_pos;i>=0;i--)
             {
                 ptr = ptr->getNext();
             }
@@ -108,6 +137,7 @@ public:
     void buildTree(const string path)
     {
         string line;
+
         ifstream myfile (path);
         if (myfile.is_open())
         {
@@ -115,21 +145,31 @@ public:
             {
                 int pos = line.find('.');
                 string data = line.substr(0,pos);
+                cout << "**Data = " << data << endl;
 
-                int pos2 = line.find(' ');
-                string key0 = line.substr(pos2, pos);
-                int key1 = atoi(key0.c_str()); 
 
-                string str = line.substr(pos2+1);
+                string str = line.substr(pos+1);
+                int pos2 = str.find('.');
+                string key0 = line.substr(pos+1, pos2);
+                int key1 = atoi(key0.c_str());
+                cout <<"**Key0 = " << key0 << endl;
+                
+
                 pos = str.find_last_of('.');
                 string str2 = str.substr(pos+1);
                 string::size_type sz;
-
                 int node_pos = atoi(str2.c_str());
-                str = str.substr(0,pos);
-                TreeNode<Type> *ptr = findParent(str);
-                // cout << "parent for " << data << " is "<< (ptr==nullptr?"nullptr":ptr->data)<<endl;
-                insert(data, key1, ptr, node_pos);
+                
+                str = str.substr(pos2+1);
+                cout << "str: " << str << endl;
+
+                //Find the parentNode to the TreeNode.
+                TreeNode<Type> *pPtr = findParent(str);
+                
+                insert(data, key1, pPtr, node_pos);
+                Size++; //Increment size.
+
+                pPtr = NULL;
             }
             myfile.close();
         }
