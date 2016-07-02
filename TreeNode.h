@@ -103,22 +103,28 @@ public:
         }  
 
         else
-        { 
-            int _pos = str.find('.');
-            string str2 = str.substr(_pos);
-            int parent_pos = atoi(str2.c_str());
+        {
+            string str2 = str;
+            cout << "**str2: " << str2 << endl;
+            int _pos = 0;
 
-            cout << parent_pos << endl;
+            for(int i = level; i > 0; i--)
+            {
+                int _pos2 = str2.find('.');
+                str2 = str2.substr(_pos, _pos2);
+                _pos = _pos2;
+                cout << "str2 = " << str2 << endl;
+            }
+            int parent_pos = atoi(str2.c_str());
+            cout << "Parent Pos: " << parent_pos << endl;
 
             int cur_level = 0;       
             int last_dot = str.find_last_of('.');
-            //cout << "lastdot" << last_dot << endl;
             str = str.substr(last_dot+1); // 0.#.#.child_pos
-
             int child_pos = atoi(str.c_str());
-
             cout << "childpos" << child_pos << endl;
 
+            
 
             if(level == 1)
             {
@@ -129,7 +135,7 @@ public:
             TreeNode<Type> *ptr = root;
             //ptr->children = new LinkList<TreeNode*>;
 
-            while (ptr->children != NULL && cur_level != level)
+            while (ptr->children != NULL && cur_level != (level-1))
             {
                 cout << "1) ptr->data = " << ptr->data <<  endl;
                 cout << "2) ptr->children->getHead()->data = " << ptr->children->getHead()->data << endl;
@@ -137,11 +143,12 @@ public:
                 cur_level++;
             }
 
-            if(parent_pos == 0)
+             
+            /*if(parent_pos == 0)
             {
                 return ptr;
-            }
-            for(int i = child_pos; i >= 0; i--)
+            }*/
+            for(int i = parent_pos; i > 1; i--)
             {
                 cout << "3) ptr->data = " << ptr->data << endl;
                 cout << "4) ptr->getNext()->data :" << ptr->getNext()->data << endl;
@@ -176,7 +183,6 @@ public:
 
                 pos = str.find_last_of('.');
                 string str2 = str.substr(pos+1);
-                cout << "str2 = " << str2 << endl;
                 //DELETE::string::size_type sz;
                 int node_pos = atoi(str2.c_str());
                 cout << "**pos : " << node_pos << endl;
