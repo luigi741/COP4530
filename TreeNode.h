@@ -46,7 +46,7 @@ public:
 
     void insert(const Type & data, const int &key, TreeNode<Type> *parent,int node_pos)
     {
-        cout << "Inserting " << data <<" in position "<<node_pos<<  ", parent is " << (parent==NULL ? "NULL, this is the root.":parent->data) << endl;
+        cout << "Inserting " << data <<" in Childposition "<<node_pos<<  ", parent is " << (parent==NULL ? "NULL, this is the root.":parent->data) << endl;
         
         TreeNode<Type> *n = new TreeNode<Type>(key, data);
 
@@ -104,8 +104,12 @@ public:
 
         else
         { 
+            int _pos = str.find('.');
+            string str2 = str.substr(_pos);
+            int parent_pos = atoi(str2.c_str());
 
-            cout << "else" << endl;
+            cout << parent_pos << endl;
+
             int cur_level = 0;       
             int last_dot = str.find_last_of('.');
             //cout << "lastdot" << last_dot << endl;
@@ -127,16 +131,23 @@ public:
 
             while (ptr->children != NULL && cur_level != level)
             {
-                cout << "ptr->children->getHead()->data = " << ptr->children->getHead()->data << endl;
+                cout << "1) ptr->data = " << ptr->data <<  endl;
+                cout << "2) ptr->children->getHead()->data = " << ptr->children->getHead()->data << endl;
                 ptr = ptr->children->getHead();
                 cur_level++;
             }
 
+            if(parent_pos == 0)
+            {
+                return ptr;
+            }
             for(int i = child_pos; i >= 0; i--)
             {
-                cout << "ptr->getNext()->data :" << ptr->getNext()->data << endl;
+                cout << "3) ptr->data = " << ptr->data << endl;
+                cout << "4) ptr->getNext()->data :" << ptr->getNext()->data << endl;
                 ptr = ptr->getNext();
             }
+
             return ptr;
         }
     }
@@ -165,6 +176,7 @@ public:
 
                 pos = str.find_last_of('.');
                 string str2 = str.substr(pos+1);
+                cout << "str2 = " << str2 << endl;
                 //DELETE::string::size_type sz;
                 int node_pos = atoi(str2.c_str());
                 cout << "**pos : " << node_pos << endl;
