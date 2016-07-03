@@ -48,24 +48,37 @@ int main()
     }
     */
     TreeNode<string>* Tree = new TreeNode<string>;
-
     int opCode;
-    cout << "GenTree Functions: " << endl;
-    cout << "1. BuildTree()" << endl;
-    cout << "2. AddNode()" << endl;
-    cout << "3. del()" << endl;
-    cout << "Enter function to test: ";
-    cin >> opCode;
+    while(opCode != 0)
+    {
+        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        cout << "GenTree Functions: " << endl;
+        cout << "0. EXIT" << endl;
+        cout << "1. BuildTree()" << endl;
+        cout << "2. preOrder()" << endl;
+        cout << "3. postorder()" << endl;
+        cout << "Enter function to test: ";
+        cin >> opCode;
 
-    switch (opCode) {
-    case 1: 
-            Tree->buildTree("tree.txt");
-            break;
+        switch (opCode) 
+        {
+        case 1: 
+                Tree->buildTree("tree.txt");
+                break;
+
+        case 2:
+                //Tree->preorder(Tree->getRoot());
+                break;
+/*
+        case 3:
+                Tree->postorder(Tree->getRoot());
+                break;*/
+        }
+
     }
 
-
-    cout << "Push from Max's Laptop 11:41A" << endl;
-	cout << "Test at 8:10P" << endl;
 
 	return 0;
 }

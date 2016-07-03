@@ -12,12 +12,10 @@ template<class T> class LinkList
 {
 	private:
 		int sz; //number of entries in linked list.
-		int childID = 1;
 		T head;
 		T tail;
 		T childArray; //An pointer to Node pointers that
 							//point to the children of a node.
-
 		template<class Type> friend class TreeNode;
 	public:
 		LinkList():head(NULL), tail(NULL)
@@ -44,25 +42,23 @@ template<class T> class LinkList
 		void addNode(T _node)
 		{
 			//Adds node to the back of the linkList.
-			T tmp_node = _node;
         	T ptr = head;
 	        if (ptr == NULL)
 	        {
-	            head = tmp_node;
+	        	//cout << "ptr" << ptr->getNext() << endl;
+	            head = _node;
 	            sz++;
-	            childID = 1;
 	        }
 	        else
 	        {
 	            while(ptr->getNext() != NULL)
 	            {
 	                ptr = ptr->getNext();
-	                childID++;
 	            }
-	            ptr->setNext(tmp_node);
+	            ptr->setNext(_node);
 	            sz++;
 	        }
-        	LinkList::printList();
+        	//LinkList::printList();
 		}
 
 //Accessors
@@ -79,7 +75,7 @@ template<class T> class LinkList
 
 		void setHead(T TreeNode)
 		{
-			this->head = TreeNode;
+			addNode(TreeNode);
 		}
 
 		T getTail()
@@ -92,7 +88,7 @@ template<class T> class LinkList
 	        T ptr = head;
 	        while(ptr !=NULL)
 	        {
-	            cout << "Node[" << ptr->getID() <<"]="; // << ptr->data << "-->";
+	            cout << "Node[" << ptr->showKey() <<"]="; // << ptr->data << "-->";
 	            ptr = ptr->getNext();
 	        }
 	        cout << "end" << endl;

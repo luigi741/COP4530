@@ -46,39 +46,26 @@ public:
 
     void insert(const Type & data, const int &key, TreeNode<Type> *parent,int node_pos)
     {
-        cout << "Inserting " << data <<" in Childposition "<<node_pos<<  ", parent is " << (parent==NULL ? "NULL, this is the root.":parent->data) << endl;
+        cout << "Inserting " << data <<" in Childposition "<< node_pos <<  ", parent is " << (parent==NULL ? "NULL, this is the root.":parent->data) << endl;
         
         TreeNode<Type> *n = new TreeNode<Type>(key, data);
 
         if (parent==NULL)
         {
-            //cout << "parent == NULL;" << endl;
             root = n;
-            //cout << "root->data" << root->data << endl;
             Size++;
         }
         else
         {
-            //cout << "DEBUG: " << endl;
             if(parent->children == NULL)
             {
                 parent->children = new LinkList<TreeNode*>;
-                parent->children->setHead(n);
-                n->parentNode = parent;
-                Size++;
             }
-            else
-            {
-                TreeNode<Type> *ptr = parent->children->getHead();
-                while(ptr->getNext() != NULL) 
-                {
-                    ptr = ptr->getNext();
-                }
-                    
-                n->parentNode = parent;
-                ptr->next = n;
-                Size++;
-            }
+
+            parent->children->addNode(n);
+            
+            Size++;
+
         }
     }
 
@@ -86,10 +73,8 @@ public:
     {
         int level = 0;
         //Counts the number of periods (represent levels in tree)
-        //cout << "debug:strsize " << str.size() << endl;
-        for (int i=str.size()-1; i >=0 ; i--)
+        for (int i = str.size()-1; i >=0 ; i--)
         {
-
             if (str[i]=='.') level++;
             //cout << "HERE" << endl;
         }
@@ -101,48 +86,12 @@ public:
             //cout << "return NULL" << endl;
             return NULL;
         }  
-
         else
         {
-            int cur_level = 0;       
-            int last_dot = str.find('.');
-            //cout << "lastdot" << last_dot << endl;
-            str = str.substr(last_dot+1); // 0.child_pos
-            int child_pos = atoi(str.c_str());
-            cout << "childpos" << child_pos << endl;
-
-            /*int _pos = last_dot;
-            string str2 = str.substr(0,_pos);
-            int parent_pos = atoi(str2.c_str());
-
-            cout << "parent_pos = " << parent_pos << endl;*/
-
-            if(level == 1)
-            {
-                return root;
-            } 
-
-
-            TreeNode<Type> *ptr = root;
-            //ptr->children = new LinkList<TreeNode*>;
-
-            while (ptr->children != NULL && cur_level != (level-1))
-            {
-                //cout << "1) ptr->data = " << ptr->data <<  endl;
-                //cout << "2) ptr->children->getHead()->data = " << ptr->children->getHead()->data << endl;
-                ptr = ptr->children->getHead();
-                cur_level++;
-            }
-
-            //cout << "Parent Pos: " << parent_pos << endl; 
-            /*if(parent_pos == 0)
-            {
-                return ptr;
-            }*/
-
-            return ptr;
-        }
+            return root;
+        } 
     }
+
 
     void buildTree(const string path)
     {
@@ -179,6 +128,8 @@ public:
                 //Find the parentNode to the TreeNode.
                 TreeNode<Type> *pPtr = findParent(str);
                 
+                cout << "**parent: " << pPtr->showData() << endl;
+
                 insert(data, key1, pPtr, node_pos);
                 Size++; //Increment size.
 
@@ -297,22 +248,60 @@ public:
         //Return pointer to a node that holds data
     }
 
-    //NOT DONE
-    void preorder()
+    void visit(TreeNode<Type> *node)
     {
-        //PREORDER TRAVERSAL
+        if(node != NULL)
+        {
+            cout << "VISIT: " << node->data << endl;
+        }
+        else
+        {
+            cout << "VISIT: NULL" << endl;
+        }
     }
 
     //NOT DONE
-    void postorder()
+    void preorder(TreeNode<Type>* node)
+    {
+        //PREORDER TRAVERSAL
+        visit(node);
+        if(node->children != NULL)
+        {
+            if(node->children->getHead() != NULL)
+            {
+                preorder(node->children->getHead());
+            }
+        }
+        if(node->next != NULL)
+        {
+            preorder(node->next);
+        }
+    }
+
+    //NOT DONE
+    void postorder(TreeNode<Type> *node)
     {
         //post order traversal
+        if(node->children->getHead() == NULL)
+        {
+            postorder(node->children->getHead());
+        }
+        this->visit(node);
+        if(node->getNext() == NULL)
+        {
+            postorder(node->getNext());
+        }
     }
 
     //NOT DONE
     void levelorder()
     {
 
+    }
+
+    void setNext(TreeNode<Type>* node)
+    {
+        this->next = node;
     }
 
     TreeNode<Type>* getNext() const
@@ -338,15 +327,15 @@ public:
         return key;
     }
 
-    void disTree() const
+    void isChildren()
     {
-        TreeNode<Type> *ptr = root;
-
-
-        while(ptr != NULL)
+        if(children == NULL)
         {
-            //
+            cout << "CHILDREN::NULL" << endl;
+            return;
         }
+        cout << "HIDE YO KIDS" << endl;
     }
+
 };
 #endif // TREENODE_H_INCLUDED
